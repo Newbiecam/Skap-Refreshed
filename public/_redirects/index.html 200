@@ -1,1 +1,3115 @@
 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skap | Refreshed</title>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --panel-bg: rgba(10, 10, 10, 0.88);
+            --panel-border: rgb(50, 50, 50);
+            --soft-bg: rgba(255,255,255,0.04);
+            --soft-border: rgba(255,255,255,0.08);
+            --text-dim: rgb(170, 170, 170);
+            --accent: #ff00c8b3;
+            --accent-solid: #ff00c8;
+            --green: rgb(38, 179, 122);
+            --red: rgb(230, 80, 100);
+            --yellow: rgb(230, 196, 62);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: "Rubik", Arial, Helvetica, sans-serif;
+            background: hsl(0 0% 6%);
+            color: #fff;
+        }
+
+        body {
+            position: relative;
+        }
+
+        #bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .screen {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 104px 24px 24px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 76px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links span {
+            font-family: "Rubik", Arial, Helvetica, sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            min-width: 100px;
+            height: 40px;
+            line-height: 36px;
+            border-radius: 10px;
+            background-color: transparent;
+            border: 2px solid rgb(255,255,255);
+            color: white;
+            transition-duration: 0.25s;
+            cursor: pointer;
+            user-select: none;
+            padding: 0 16px;
+        }
+
+        .nav-links span:hover,
+        .nav-links span.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            text-shadow: 1px 1px rgba(43,43,43,0.9);
+        }
+
+        .glass-panel,
+        .rooms-shell,
+        .settings-shell,
+        .avatar-shell {
+            width: min(1120px, 96vw);
+            border-radius: 28px;
+            background: var(--panel-bg);
+            border: 2px solid var(--panel-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .glass-panel {
+            max-width: 470px;
+            padding: 34px;
+            text-align: center;
+        }
+
+        .section-shell {
+            padding: 24px;
+        }
+
+        .page-title {
+            font-weight: 500;
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: rgb(131, 131, 131);
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .logo-title {
+            font-weight: 500;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .small-note {
+            color: var(--text-dim);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-top: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: rgb(220, 220, 220);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        .login-input,
+        select {
+            padding: 1px 10px;
+            background: rgb(35, 35, 35);
+            border: 2px solid rgb(60, 60, 60);
+            margin-top: 6px;
+            height: 38px;
+            border-radius: 10px;
+            width: 100%;
+            text-align: left;
+            font-size: 16px;
+            color: rgb(220, 220, 220);
+            outline: none;
+            font-family: "Rubik", Arial, Helvetica, sans-serif;
+        }
+
+        input[type="range"] {
+            width: 190px;
+            accent-color: var(--accent-solid);
+        }
+
+        button, .button {
+            font-family: "Rubik", Arial, Helvetica, sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            text-align: center;
+            min-width: 100px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: transparent;
+            border-width: 2px;
+            border-color: rgb(255, 255, 255);
+            border-style: solid;
+            color: white;
+            margin-left: 4px;
+            margin-top: 4px;
+            transition-duration: 0.25s;
+            cursor: pointer;
+        }
+
+        button:hover, .button:hover {
+            text-shadow: 1px 1px rgb(43, 43, 43);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border-color: rgb(255,255,255);
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .form-message {
+            min-height: 24px;
+            margin-top: 14px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-message.error {
+            color: var(--red);
+        }
+
+        .form-message.success {
+            color: var(--green);
+        }
+
+        .rules-box {
+            margin-top: 18px;
+            padding: 14px;
+            text-align: left;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .rules-box h4 {
+            margin-bottom: 8px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .rules-box p {
+            color: rgb(170,170,170);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* PLAY */
+        #play-screen {
+            padding-top: 90px;
+        }
+
+        .play-layout {
+            width: min(1100px, 96vw);
+            display: grid;
+            grid-template-columns: 1.25fr 0.85fr;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .play-main,
+        .play-side {
+            border-radius: 28px;
+            background: var(--panel-bg);
+            border: 2px solid var(--panel-border);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+        }
+
+        .play-main {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 520px;
+        }
+
+        .play-side {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .menu-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .menu-title {
+            font-size: clamp(2.8rem, 6vw, 5.4rem);
+            font-weight: 500;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            margin-bottom: 18px;
+        }
+
+        .menu-sub {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 22px;
+            color: rgb(220,220,220);
+        }
+
+        .menu-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .menu-btn {
+            width: 220px;
+            height: 58px;
+            min-width: unset;
+            font-size: 20px;
+            border-radius: 16px;
+            margin: 0;
+        }
+
+        .menu-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 16px;
+            text-align: left;
+        }
+
+        .menu-card h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .menu-card p {
+            color: rgb(150,150,150);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 12px;
+            margin-top: 24px;
+            width: 100%;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 18px;
+            text-align: left;
+        }
+
+        .stat-label {
+            color: rgb(131,131,131);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .news-item {
+            padding: 14px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .news-item .news-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .news-item .news-desc {
+            font-size: 13px;
+            color: rgb(150,150,150);
+            line-height: 1.4;
+        }
+
+        /* ROOMS */
+        .rooms-shell {
+            height: min(78vh, 760px);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rooms-topbar {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .rooms-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rooms-search {
+            width: 220px;
+        }
+
+        .rooms-filter {
+            width: 170px;
+        }
+
+        .rooms-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .rooms-stat {
+            padding: 16px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .rooms-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .room-item {
+            display: grid;
+            grid-template-columns: 1.55fr 0.75fr 0.75fr auto;
+            gap: 14px;
+            align-items: center;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 16px;
+        }
+
+        .room-name {
+            font-weight: 500;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .room-desc {
+            color: rgb(150,150,150);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .room-pill {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 12px;
+            color: rgb(220,220,220);
+        }
+
+        .room-meta-label {
+            color: rgb(131,131,131);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .room-meta-value {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .join-btn {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            min-width: 92px;
+        }
+
+        /* AVATAR */
+        .avatar-shell {
+            height: min(78vh, 760px);
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 18px;
+        }
+
+        .avatar-left,
+        .avatar-right {
+            border-radius: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 18px;
+        }
+
+        .avatar-preview {
+            height: 220px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .player-avatar-stack {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-avatar-core {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffffff, #d2d2d2);
+            box-shadow: inset 0 0 0 4px rgba(255,255,255,0.14), 0 14px 28px rgba(0,0,0,0.28);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .player-avatar-core.rainbow {
+            background: linear-gradient(135deg, #ff4d4d, #ffd24d, #66ffb3, #5fb8ff, #d76dff, #ff4d4d);
+            background-size: 300% 300%;
+            animation: rainbowShift 4.8s linear infinite;
+        }
+
+        .player-hat {
+            position: absolute;
+            width: 120px;
+            image-rendering: pixelated;
+            pointer-events: none;
+            filter: drop-shadow(0 6px 16px rgba(0,0,0,0.28));
+        }
+
+        .hat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            max-height: 100%;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .hat-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 132px;
+            transition: 0.18s ease;
+        }
+
+        .hat-item:hover,
+        .hat-item.active {
+            background: rgba(255, 0, 200, 0.12);
+            border-color: rgba(255, 0, 200, 0.45);
+        }
+
+        .hat-item img {
+            width: 58px;
+            height: 58px;
+            image-rendering: pixelated;
+            margin-bottom: 10px;
+        }
+
+        .hat-name {
+            font-size: 12px;
+            color: rgb(220,220,220);
+            text-align: center;
+        }
+
+        /* SETTINGS */
+        .settings-shell {
+            height: min(78vh, 760px);
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 18px;
+        }
+
+        .settings-sidebar,
+        .settings-content {
+            border-radius: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 18px;
+        }
+
+        .settings-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .settings-tab {
+            min-width: unset;
+            width: 100%;
+            margin: 0;
+            text-align: left;
+            padding: 0 14px;
+            background: transparent;
+        }
+
+        .settings-tab.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .settings-content {
+            overflow-y: auto;
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-group {
+            margin-top: 18px;
+        }
+
+        .settings-group-title {
+            color: rgb(131,131,131);
+            font-size: 12px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .setting-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .setting-desc {
+            font-size: 13px;
+            color: rgb(150,150,150);
+            line-height: 1.4;
+            max-width: 500px;
+        }
+
+        .switch-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* SHOP */
+        .shop-shell {
+            width: min(1240px, 96vw);
+            height: min(78vh, 760px);
+            padding: 24px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+            gap: 18px;
+            border-radius: 28px;
+            background: var(--panel-bg);
+            border: 2px solid var(--panel-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .shop-left,
+        .shop-right {
+            border-radius: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 18px;
+            min-height: 0;
+        }
+
+        .shop-left {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .shop-right {
+            overflow-y: auto;
+        }
+
+        .shop-header-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .coin-chip {
+            min-width: 148px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.035));
+            border: 1px solid rgba(255,255,255,0.08);
+            text-align: right;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .coin-chip .stat-label {
+            margin-bottom: 6px;
+        }
+
+        .shop-toolbar {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .shop-search {
+            width: 100%;
+        }
+
+        .shop-toolbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .shop-category-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .shop-category-tab {
+            min-width: unset;
+            height: 38px;
+            padding: 0 14px;
+            margin: 0;
+            border-radius: 999px;
+            border-color: rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.035);
+            font-size: 14px;
+        }
+
+        .shop-category-tab.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            text-shadow: 1px 1px rgba(43,43,43,0.9);
+        }
+
+        .shop-ownership-filter {
+            width: 150px;
+        }
+
+        .shop-summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            color: rgb(150,150,150);
+            font-size: 13px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 14px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .shop-item-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.025));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 260px;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            cursor: pointer;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        .shop-item-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.16);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.18);
+        }
+
+        .shop-item-card.selected {
+            border-color: rgba(255, 0, 200, 0.52);
+            box-shadow: 0 0 0 1px rgba(255, 0, 200, 0.18), 0 18px 36px rgba(0,0,0,0.24);
+            background: linear-gradient(180deg, rgba(255,0,200,0.10), rgba(255,255,255,0.03));
+        }
+
+        .shop-item-card.owned {
+            border-color: rgba(255,255,255,0.14);
+        }
+
+        .shop-item-card.equipped {
+            border-color: rgba(255, 0, 200, 0.6);
+            background: linear-gradient(180deg, rgba(255,0,200,0.14), rgba(255,255,255,0.03));
+        }
+
+        .shop-item-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .shop-item-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .shop-item-desc {
+            font-size: 13px;
+            color: rgb(150,150,150);
+            line-height: 1.45;
+        }
+
+        .shop-item-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 2px;
+        }
+
+        .shop-pill,
+        .shop-price {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 12px;
+            color: rgb(230,230,230);
+            white-space: nowrap;
+        }
+
+        .shop-pill.state-owned {
+            background: rgba(70, 180, 120, 0.16);
+            border-color: rgba(70, 180, 120, 0.35);
+        }
+
+        .shop-pill.state-equipped {
+            background: rgba(255, 0, 200, 0.18);
+            border-color: rgba(255, 0, 200, 0.38);
+        }
+
+        .shop-preview-box {
+            min-height: 86px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .shop-preview-box .mini-chat-line,
+        .shop-preview-box .chat-preview-line {
+            font-size: 15px;
+            line-height: 1.5;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .shop-preview-box .player-avatar-stack {
+            transform: scale(0.88);
+            transform-origin: center;
+        }
+
+        .shop-empty-state {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 180px;
+            border-radius: 18px;
+            border: 1px dashed rgba(255,255,255,0.12);
+            color: rgb(150,150,150);
+            font-size: 14px;
+            line-height: 1.6;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .shop-empty-state.visible {
+            display: flex;
+        }
+
+        .shop-selection-card,
+        .chat-preview-card,
+        .shop-avatar-card,
+        .shop-controls .menu-card {
+            border-radius: 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 18px;
+        }
+
+        .shop-selection-card {
+            margin-bottom: 14px;
+        }
+
+        .shop-selection-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .shop-selection-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .shop-selection-desc {
+            color: rgb(150,150,150);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .shop-selection-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .shop-selection-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .shop-feedback {
+            min-height: 20px;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .shop-feedback.success {
+            color: var(--green);
+        }
+
+        .shop-feedback.error {
+            color: var(--red);
+        }
+
+        .chat-preview-card {
+            margin-top: 0;
+        }
+
+        .chat-preview-line {
+            font-size: 18px;
+            line-height: 1.55;
+            word-break: break-word;
+        }
+
+        .preview-tag-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-right: 8px;
+            vertical-align: middle;
+            color: #0d0d0d;
+            background: linear-gradient(135deg, #ffe27a, #ff9d3d);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+        }
+
+        .preview-tag-pill.legend {
+            background: linear-gradient(135deg, #8cf8ff, #7c91ff, #d36bff);
+            color: white;
+        }
+
+        .preview-tag-pill.custom {
+            background: linear-gradient(135deg, #fff, #d7d7d7);
+            color: #111;
+        }
+
+        .preview-name {
+            font-weight: 500;
+        }
+
+        .preview-name.rainbow-text,
+        .mini-chat-line .rainbow-text {
+            background: linear-gradient(90deg, #ff4d4d, #ffb84d, #fff06a, #61ffb0, #67d1ff, #cf73ff, #ff4d4d);
+            background-size: 280% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbowShift 4s linear infinite;
+        }
+
+        .preview-name.gold-text,
+        .mini-chat-line .gold-text {
+            background: linear-gradient(90deg, #fff2a6, #ffc857, #ffd700, #fff2a6);
+            background-size: 220% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbowShift 5s linear infinite;
+        }
+
+        .shop-avatar-card {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-avatar-stack {
+            width: 150px;
+            height: 150px;
+        }
+
+        .shop-controls {
+            display: grid;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .field-caption {
+            color: rgb(150,150,150);
+            font-size: 12px;
+            margin-bottom: 8px;
+            line-height: 1.45;
+        }
+
+        .tiny-status {
+            font-size: 12px;
+            color: rgb(150,150,150);
+        }
+
+        button:disabled,
+        .button:disabled {
+            opacity: 0.58;
+            cursor: not-allowed;
+            text-shadow: none;
+        }
+
+
+        @keyframes rainbowShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 280% 50%; }
+        }
+
+        /* loader */
+        #asset-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(5, 5, 5, 0.82);
+            backdrop-filter: blur(16px);
+        }
+
+        .loader-panel {
+            width: min(92vw, 520px);
+            padding: 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(20,20,20,0.78);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .loader-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .loader-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .loader-bar-wrap {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .loader-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ffffff, #7affd3);
+            transition: width 0.18s ease;
+        }
+
+        .loader-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 0.82rem;
+            opacity: 0.82;
+        }
+
+        .loader-log {
+            margin-top: 14px;
+            font-size: 0.78rem;
+            opacity: 0.68;
+            min-height: 18px;
+            word-break: break-word;
+        }
+
+        .fade-out {
+            animation: fadeOutLoader 0.45s ease forwards;
+        }
+
+        @keyframes fadeOutLoader {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(60, 60, 60, 160);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(60, 60, 60, 220);
+        }
+
+        @media (max-width: 980px) {
+            .play-layout,
+            .avatar-shell,
+            .settings-shell,
+            .shop-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .shop-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .shop-toolbar-right {
+                justify-content: flex-start;
+            }
+
+            .room-item {
+                grid-template-columns: 1fr;
+                align-items: start;
+            }
+
+            .rooms-stats {
+                grid-template-columns: repeat(2, minmax(0,1fr));
+            }
+
+            .rooms-topbar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .screen {
+                padding: 96px 14px 14px;
+            }
+
+            .glass-panel,
+            .rooms-shell,
+            .settings-shell,
+            .avatar-shell,
+            .play-main,
+            .play-side {
+                padding: 16px;
+            }
+
+            .menu-btn {
+                width: min(100%, 260px);
+            }
+
+            .shop-category-tabs {
+                width: 100%;
+            }
+
+            .shop-category-tab,
+            .shop-ownership-filter {
+                width: 100%;
+            }
+
+            .quick-stats,
+            .rooms-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<div id="asset-loader">
+    <div class="loader-panel">
+        <div class="loader-title">loading textures</div>
+        <div class="loader-subtitle">Caching and decoding game assets for a faster loading time.</div>
+        <div class="loader-bar-wrap">
+            <div class="loader-bar" id="loader-bar"></div>
+        </div>
+        <div class="loader-meta">
+            <span id="loader-count">0 / 0</span>
+            <span id="loader-percent">0%</span>
+        </div>
+        <div class="loader-log" id="loader-log">starting...</div>
+    </div>
+</div>
+
+<nav id="main-nav">
+    <div class="nav-links">
+        <span onclick="showScreen('play-screen', this)" class="active">play</span>
+        <span onclick="showScreen('rooms-screen', this)">rooms</span>
+        <span onclick="showScreen('shop-screen', this)">shop</span>
+        <span onclick="showScreen('avatar-screen', this)">avatar</span>
+        <span onclick="showScreen('settings-screen', this)">settings</span>
+    </div>
+</nav>
+
+<div id="auth-screen" class="screen">
+    <div class="glass-panel">
+        <div class="logo-title">Skap | Refreshed</div>
+        <div class="small-note">login or register to continue</div>
+
+        <div class="form-group">
+            <label for="username-input">username</label>
+            <input type="text" id="username-input" maxlength="16" placeholder="1-16 letters or numbers">
+        </div>
+
+        <div class="form-group">
+            <label for="password-input">password</label>
+            <input type="password" id="password-input" placeholder="enter any password">
+        </div>
+
+        <div class="btn-row">
+            <button id="login-btn" class="btn-primary" onclick="login()">login</button>
+            <button id="register-btn" class="btn-secondary" onclick="registerUser()">register</button>
+        </div>
+
+        <div id="auth-message" class="form-message"></div>
+
+        <div class="rules-box">
+            <h4>username rules</h4>
+            <p>
+                usernames must be 1 to 16 characters and alphanumeric only.<br>
+                no spaces, no underscores, no symbols, no custom font characters.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="play-screen" class="screen hidden">
+    <div class="play-layout">
+        <div class="play-main">
+            <div class="menu-center">
+                <h1 class="menu-title">Skap | Refreshed</h1>
+                <p class="menu-sub" id="logged-in-text">logged in as username</p>
+
+                <div class="menu-actions">
+                    <button class="menu-btn btn-primary" onclick="alert('play clicked')">play</button>
+                    <button class="menu-btn btn-secondary" onclick="logout()">logout</button>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">account level</div>
+                        <div class="stat-value" id="home-level">12</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">coins</div>
+                        <div class="stat-value" id="home-coins">2,450</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">rooms online</div>
+                        <div class="stat-value" id="home-rooms">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">selected hat</div>
+                        <div class="stat-value" id="home-hat">None</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="play-side">
+            <div class="menu-card">
+                <h3>daily challenge</h3>
+                <p>complete 3 room clears without dying to earn a bonus reward chest.</p>
+            </div>
+            <div class="menu-card">
+                <h3>status</h3>
+                <p>server region: us-east<br>build: refreshed beta<br>textures: cached locally</p>
+            </div>
+            <div class="menu-card">
+                <h3>rotation</h3>
+                <p>featured modes this week: speedrun, hardcore, chaos survival.</p>
+            </div>
+
+            <div class="news-list">
+                <div class="news-item">
+                    <div class="news-title">new update</div>
+                    <div class="news-desc">room browser improvements and cleaner account flow are now live.</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">avatar sync</div>
+                    <div class="news-desc">your selected hat is now remembered on this device.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="rooms-screen" class="screen hidden">
+    <div class="rooms-shell">
+        <div class="rooms-topbar">
+            <div>
+                <div class="page-title">rooms</div>
+                <div class="page-subtitle">browse public rooms, filter by mode, and join fast</div>
+            </div>
+
+            <div class="rooms-actions">
+                <input class="rooms-search" id="rooms-search" type="text" placeholder="search rooms...">
+                <select class="rooms-filter" id="rooms-filter">
+                    <option value="all">all modes</option>
+                    <option value="casual">casual</option>
+                    <option value="speedrun">speedrun</option>
+                    <option value="hardcore">hardcore</option>
+                    <option value="chaos">chaos</option>
+                    <option value="survival">survival</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="rooms-stats">
+            <div class="rooms-stat">
+                <div class="stat-label">online rooms</div>
+                <div class="stat-value" id="stat-rooms">0</div>
+            </div>
+            <div class="rooms-stat">
+                <div class="stat-label">players online</div>
+                <div class="stat-value" id="stat-players">0</div>
+            </div>
+            <div class="rooms-stat">
+                <div class="stat-label">open slots</div>
+                <div class="stat-value" id="stat-slots">0</div>
+            </div>
+            <div class="rooms-stat">
+                <div class="stat-label">best ping</div>
+                <div class="stat-value" id="stat-best-ping">0ms</div>
+            </div>
+        </div>
+
+        <div class="rooms-list" id="rooms-list"></div>
+    </div>
+</div>
+
+
+
+<div id="shop-screen" class="screen hidden">
+    <div class="shop-shell">
+        <div class="shop-left">
+            <div class="shop-header-row">
+                <div>
+                    <div class="page-title">item shop</div>
+                    <div class="page-subtitle">buy chat cosmetics, equip effects, and preview everything live</div>
+                </div>
+
+                <div class="coin-chip">
+                    <div class="stat-label">coins</div>
+                    <div class="stat-value" id="shop-coins">0</div>
+                </div>
+            </div>
+
+            <div class="shop-toolbar">
+                <input class="shop-search" id="shop-search" type="text" placeholder="search shop items...">
+
+                <div class="shop-toolbar-right">
+                    <div class="shop-category-tabs" id="shop-category-tabs">
+                        <button class="shop-category-tab active" data-category="all">all</button>
+                        <button class="shop-category-tab" data-category="tag">tags</button>
+                        <button class="shop-category-tab" data-category="nameEffect">name effects</button>
+                        <button class="shop-category-tab" data-category="avatarEffect">avatar effects</button>
+                    </div>
+
+                    <select class="shop-ownership-filter" id="shop-ownership-filter">
+                        <option value="all">all items</option>
+                        <option value="unowned">unowned</option>
+                        <option value="owned">owned</option>
+                        <option value="equipped">equipped</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="shop-summary-row">
+                <div id="shop-results-count">0 items</div>
+                <div>click a card to inspect it</div>
+            </div>
+
+            <div class="shop-grid" id="shop-grid"></div>
+            <div class="shop-empty-state" id="shop-empty">
+                no items match this filter right now.<br>try another category or clear the search.
+            </div>
+        </div>
+
+        <div class="shop-right">
+            <div class="shop-selection-card">
+                <div class="shop-selection-top">
+                    <div>
+                        <div class="shop-selection-title" id="shop-selected-title">select an item</div>
+                        <div class="shop-selection-desc" id="shop-selected-desc">pick an item from the list to inspect it here.</div>
+                    </div>
+                    <div class="shop-price" id="shop-selected-price">--</div>
+                </div>
+
+                <div class="shop-selection-meta">
+                    <div class="shop-pill" id="shop-selected-category">category</div>
+                    <div class="shop-pill" id="shop-selected-status">status</div>
+                </div>
+
+                <div class="shop-selection-actions">
+                    <button id="shop-selected-action" class="btn-primary" disabled>select an item</button>
+                    <div class="tiny-status" id="shop-selected-note">preview updates live below</div>
+                </div>
+
+                <div class="shop-feedback" id="shop-feedback"></div>
+            </div>
+
+            <div class="page-title" style="font-size:26px;">live preview</div>
+            <div class="page-subtitle">this preview updates when you buy or equip chat items</div>
+
+            <div class="chat-preview-card">
+                <div class="chat-preview-line">
+                    <span id="chat-preview-tag" class="preview-tag-pill hidden">(VIP)</span>
+                    <span id="chat-preview-name" class="preview-name">username</span><span>: </span><span id="chat-preview-message">Hello world!</span>
+                </div>
+            </div>
+
+            <div class="shop-avatar-card">
+                <div class="player-avatar-stack preview-avatar-stack">
+                    <div id="shop-avatar-core" class="player-avatar-core"></div>
+                    <img id="shop-preview-hat" class="player-hat" src="https://skap.io/textures/hats/none.png" alt="shop avatar preview">
+                </div>
+            </div>
+
+            <div class="shop-controls">
+                <div class="menu-card">
+                    <h3>custom tag editor</h3>
+                    <p class="field-caption">buy Custom Tag first. your tag is automatically wrapped in parentheses in chat.</p>
+                    <input type="text" id="custom-tag-input" maxlength="10" placeholder="MYTAG">
+                    <div class="btn-row" style="justify-content:flex-start; margin-top:12px;">
+                        <button class="btn-primary" onclick="equipCustomTag()">use custom tag</button>
+                        <button class="btn-secondary" onclick="clearTagEquip()">clear tag</button>
+                    </div>
+                    <div class="tiny-status" id="custom-tag-status">custom tags are locked</div>
+                </div>
+
+                <div class="menu-card">
+                    <h3>preview message</h3>
+                    <p class="field-caption">change the sample text so you can see how your chat line will look.</p>
+                    <input type="text" id="chat-preview-input" maxlength="60" value="Hello world!" placeholder="type preview message">
+                </div>
+
+                <div class="menu-card">
+                    <h3>reset equipped effects</h3>
+                    <p class="field-caption">clears your currently equipped tag, name effect, and avatar effect without removing owned items.</p>
+                    <div class="btn-row" style="justify-content:flex-start; margin-top:8px;">
+                        <button class="btn-secondary" onclick="clearAllCosmetics()">clear all</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="avatar-screen" class="screen hidden">
+    <div class="avatar-shell">
+        <div class="avatar-left">
+            <div class="page-title">avatar</div>
+            <div class="page-subtitle">pick a hat and save it locally</div>
+
+            <div class="avatar-preview">
+                <div class="player-avatar-stack">
+                    <div id="avatar-preview-core" class="player-avatar-core"></div>
+                    <img id="selected-hat-preview" class="player-hat" src="https://skap.io/textures/hats/none.png" alt="selected hat">
+                </div>
+            </div>
+
+            <div class="menu-card">
+                <h3>selected</h3>
+                <p id="selected-hat-name">None</p>
+            </div>
+
+            <div class="btn-row" style="justify-content:flex-start; margin-top:16px;">
+                <button class="btn-primary" onclick="saveAvatar()">save avatar</button>
+            </div>
+        </div>
+
+        <div class="avatar-right">
+            <div class="page-title" style="font-size:26px;">hats</div>
+            <div class="hat-grid" id="hat-container"></div>
+        </div>
+    </div>
+</div>
+
+<div id="settings-screen" class="screen hidden">
+    <div class="settings-shell">
+        <div class="settings-sidebar">
+            <button class="settings-tab active" data-tab="general">general</button>
+            <button class="settings-tab" data-tab="graphics">graphics</button>
+            <button class="settings-tab" data-tab="audio">audio</button>
+            <button class="settings-tab" data-tab="account">account</button>
+        </div>
+
+        <div class="settings-content">
+            <div class="settings-section active" id="settings-general">
+                <div class="page-title">settings</div>
+                <div class="page-subtitle">adjust preferences without changing the animated background</div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">general</div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">compact interface</div>
+                            <div class="setting-desc">tightens spacing and keeps panels cleaner on smaller screens.</div>
+                        </div>
+                        <div class="switch-wrap">
+                            <input type="checkbox" id="compact-ui">
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">show news cards</div>
+                            <div class="setting-desc">display update and event cards on the home panel.</div>
+                        </div>
+                        <div class="switch-wrap">
+                            <input type="checkbox" id="show-news" checked>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section" id="settings-graphics">
+                <div class="page-title">graphics</div>
+                <div class="page-subtitle">visual tuning for interface elements only</div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">visual quality</div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">quality preset</div>
+                            <div class="setting-desc">changes UI density and a few render-side preferences.</div>
+                        </div>
+                        <select id="quality-preset">
+                            <option>low</option>
+                            <option selected>medium</option>
+                            <option>high</option>
+                            <option>ultra</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">panel blur</div>
+                            <div class="setting-desc">higher values make the menu panels softer behind the content.</div>
+                        </div>
+                        <input type="range" id="panel-blur" min="0" max="24" value="12">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section" id="settings-audio">
+                <div class="page-title">audio</div>
+                <div class="page-subtitle">local device sound preferences</div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">volume</div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">master volume</div>
+                            <div class="setting-desc">controls overall game audio level on this device.</div>
+                        </div>
+                        <input type="range" id="master-volume" min="0" max="100" value="74">
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">mute when unfocused</div>
+                            <div class="setting-desc">mutes the game tab when you switch away.</div>
+                        </div>
+                        <input type="checkbox" id="mute-unfocused" checked>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section" id="settings-account">
+                <div class="page-title">account</div>
+                <div class="page-subtitle">basic local account info stored in your browser</div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">session</div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">current user</div>
+                            <div class="setting-desc" id="settings-current-user">not logged in</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-name">saved account count</div>
+                            <div class="setting-desc" id="saved-account-count">0 accounts on this device</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-row" style="justify-content:flex-start; margin-top:18px;">
+                    <button class="btn-primary" onclick="saveSettings()">save settings</button>
+                    <button class="btn-secondary" onclick="logout()">logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const textureUrls = [
+        "https://skap.io/textures/powers/feather.svg",
+        "https://skap.io/textures/powers/shrinker.svg",
+        "https://skap.io/textures/powers/explosion.svg",
+        "https://skap.io/textures/powers/wall.svg",
+        "https://skap.io/textures/powers/meteor.svg",
+        "https://skap.io/textures/powers/refuel.svg",
+        "https://skap.io/textures/powers/shield.svg",
+        "https://skap.io/textures/powers/dash.svg",
+        "https://skap.io/textures/powers/lantern.svg",
+        "https://skap.io/textures/powers/ghost.svg",
+        "https://skap.io/textures/powers/frost.svg",
+        "https://skap.io/textures/powers/shell.svg",
+
+        "https://skap.io/textures/hats/none.png",
+        "https://skap.io/textures/hats/catEars.png",
+        "https://skap.io/textures/hats/catEars1.png",
+        "https://skap.io/textures/hats/catEars111.png",
+        "https://skap.io/textures/hats/topHat.png",
+        "https://skap.io/textures/hats/santa.png",
+        "https://skap.io/textures/hats/militaryHat.png",
+        "https://skap.io/textures/hats/nookyHat.png",
+        "https://skap.io/textures/hats/eggplant.png",
+        "https://skap.io/textures/hats/wolf.png",
+        "https://skap.io/textures/hats/trumpHat1.png",
+        "https://skap.io/textures/hats/bunnyEars.png",
+        "https://skap.io/textures/hats/crown.png",
+        "https://skap.io/textures/hats/kite.png",
+        "https://skap.io/textures/hats/sakura.png",
+        "https://skap.io/textures/hats/cowboy.png",
+        "https://skap.io/textures/hats/party.png",
+        "https://skap.io/textures/hats/bimbo.png",
+        "https://skap.io/textures/hats/wowo.png",
+        "https://skap.io/textures/hats/panties.png",
+        "https://skap.io/textures/hats/panties2.png",
+        "https://skap.io/textures/hats/bimboPurple.png",
+        "https://skap.io/textures/hats/bimboGreen.png",
+        "https://skap.io/textures/hats/moustache.png",
+        "https://skap.io/textures/hats/onigiri.png",
+        "https://skap.io/textures/hats/ramen.png",
+        "https://skap.io/textures/hats/salmonSushi.png",
+        "https://skap.io/textures/hats/horns.png",
+        "https://skap.io/textures/hats/devil.png",
+        "https://skap.io/textures/hats/taria.png",
+        "https://skip.nightly.pw/assets/sktextures/hats/solar.png",
+
+        "https://nky5223.github.io/SkapClient/assets/skins/SkapClient/normal.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/SkapClient/dead.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/SkapClient/frozen.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/SkapClient/deadFrozen.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/NKY/normal.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/NKY/dead.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/NKY/frozen.svg",
+        "https://nky5223.github.io/SkapClient/assets/skins/NKY/deadFrozen.svg",
+
+        "https://nky5223.github.io/SkapClient/assets/entities/blueFrisbeeEntity.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/redFrisbeeEntity.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/normal.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/reverse.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/rotating.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/spike.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/monster.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/expander.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/following.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/wavy.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/shooter.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/immune.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/stutter.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/drainer.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/turretBullet.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/enemyBullet.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/snekHead.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/snekBody.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/bouncer.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/megaBouncer.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/freezer.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/bomb0.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/bomb1.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/contractor0.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/contractor1.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/taker.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/disabler.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/harmless.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/accelerator.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/decelerator.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/gravityUp.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/gravityDown.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/gravityLeft.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/gravityRight.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/meteorBullet.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/restZone.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/shield.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/path.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/healingGhost.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/frostEntity.svg",
+        "https://nky5223.github.io/SkapClient/assets/entities/tail.svg"
+    ];
+
+    const TEXTURE_CACHE_NAME = "skap-textures-v1";
+    const textureImageRefs = [];
+
+    const loaderEl = document.getElementById("asset-loader");
+    const loaderBar = document.getElementById("loader-bar");
+    const loaderCount = document.getElementById("loader-count");
+    const loaderPercent = document.getElementById("loader-percent");
+    const loaderLog = document.getElementById("loader-log");
+
+    const USER_DB_KEY = "skapRefreshedUsers";
+    const CURRENT_USER_KEY = "skapRefreshedCurrentUser";
+    const SETTINGS_KEY = "skapRefreshedSettings";
+
+    
+    const SHOP_ITEMS = [
+        {
+            id: "vipTag",
+            name: "VIP Tag",
+            price: 1200,
+            category: "tag",
+            description: "Adds a shiny (VIP) tag before your messages.",
+            previewType: "tag",
+            previewTagText: "VIP",
+            previewTagClass: ""
+        },
+        {
+            id: "legendTag",
+            name: "Legend Tag",
+            price: 1900,
+            category: "tag",
+            description: "An animated legend-style tag for flexing in chat.",
+            previewType: "tag",
+            previewTagText: "LEGEND",
+            previewTagClass: "legend"
+        },
+        {
+            id: "customTag",
+            name: "Custom Tag",
+            price: 2200,
+            category: "tag",
+            description: "Unlock your own custom chat tag text and equip it anytime.",
+            previewType: "tag",
+            previewTagText: "MYTAG",
+            previewTagClass: "custom"
+        },
+        {
+            id: "rainbowName",
+            name: "Rainbow Name",
+            price: 1800,
+            category: "nameEffect",
+            description: "Makes your username flow through a moving rainbow gradient.",
+            previewType: "nameEffect",
+            previewNameClass: "rainbow-text"
+        },
+        {
+            id: "goldName",
+            name: "Gold Name",
+            price: 1000,
+            category: "nameEffect",
+            description: "Gives your username a premium animated gold shine.",
+            previewType: "nameEffect",
+            previewNameClass: "gold-text"
+        },
+        {
+            id: "rainbowAvatar",
+            name: "Rainbow Avatar",
+            price: 2000,
+            category: "avatarEffect",
+            description: "Turns your avatar body into a flowing rainbow orb.",
+            previewType: "avatarEffect"
+        }
+    ];
+
+
+    let currentUser = null;
+    let selectedHatKey = "none";
+    let shopState = {
+        selectedItemId: "vipTag",
+        category: "all",
+        ownership: "all",
+        query: ""
+    };
+
+    const rooms = [
+        { name: "Beginner Lobby", desc: "easy warmup maps and casual runs", players: 12, max: 20, mode: "casual", ping: 24 },
+        { name: "Speedrun Arena", desc: "fast clears and optimized routes", players: 6, max: 10, mode: "speedrun", ping: 31 },
+        { name: "Chaos Mode", desc: "dense hazards and unpredictable rooms", players: 18, max: 20, mode: "chaos", ping: 42 },
+        { name: "Hardcore Trials", desc: "tight timings and punish-heavy maps", players: 9, max: 12, mode: "hardcore", ping: 28 },
+        { name: "Casual Co-op", desc: "relaxed public room for group play", players: 14, max: 18, mode: "casual", ping: 19 },
+        { name: "Rush Circuit", desc: "short reset-heavy speed sections", players: 7, max: 12, mode: "speedrun", ping: 34 },
+        { name: "Survival Vault", desc: "endurance focused public survival queue", players: 11, max: 16, mode: "survival", ping: 26 },
+        { name: "Chaos Relay", desc: "rapid hazard layers with short checkpoints", players: 8, max: 14, mode: "chaos", ping: 37 }
+    ];
+
+    const hatData = {
+        none: { file: "none", name: "None" },
+        catEars: { file: "catEars", name: "Cat Ears" },
+        catEars1: { file: "catEars1", name: "Gray Ears" },
+        tophat: { file: "topHat", name: "Top Hat" },
+        santa: { file: "santa", name: "Santa Hat" },
+        militaryHat: { file: "militaryHat", name: "Military Hat" },
+        nookyHat: { file: "nookyHat", name: "Nooky Hat" },
+        ravelHat: { file: "eggplant", name: "Ravel Hat" },
+        wolf: { file: "wolf", name: "Wolf Hat" },
+        trumpHat: { file: "trumpHat1", name: "Trump Hat" },
+        bunnyEars: { file: "bunnyEars", name: "Bunny Ears" },
+        crown: { file: "crown", name: "Crown" },
+        kite: { file: "kite", name: "Kite" },
+        onigiri: { file: "onigiri", name: "Onigiri" },
+        taria: { file: "taria", name: "Taria" },
+        horns: { file: "horns", name: "Horns" },
+        devil: { file: "devil", name: "Devil" },
+        sakura: { file: "sakura", name: "Sakura" },
+        cowboy: { file: "cowboy", name: "Cowboy" },
+        party: { file: "party", name: "Party" },
+        bimbo: { file: "bimbo", name: "Bimbo" },
+        uwu: { file: "wowo", name: "uwu :3" },
+        flowerHat: { file: "flowerHat", name: "Flower Hat" },
+        solar: { file: "solar", name: "Solar" }
+    };
+
+    const hatTextureOverrides = {
+        solar: "https://skip.nightly.pw/assets/sktextures/hats/solar.png"
+    };
+
+
+
+    function getCategoryLabel(category) {
+        if (category === "tag") return "tag";
+        if (category === "nameEffect") return "name effect";
+        if (category === "avatarEffect") return "avatar effect";
+        return "item";
+    }
+
+    function getShopPreviewMarkup(item, username = "username") {
+        if (!item) return '<div class="mini-chat-line">preview unavailable</div>';
+
+        if (item.previewType === "avatarEffect") {
+            return `
+                <div class="player-avatar-stack">
+                    <div class="player-avatar-core rainbow"></div>
+                    <img class="player-hat" src="https://skap.io/textures/hats/none.png" alt="${item.name}">
+                </div>
+            `;
+        }
+
+        if (item.previewType === "nameEffect") {
+            return `
+                <div class="mini-chat-line">
+                    <span class="preview-name ${item.previewNameClass || ""}">${username}</span>: Hello world!
+                </div>
+            `;
+        }
+
+        return `
+            <div class="mini-chat-line">
+                <span class="preview-tag-pill ${item.previewTagClass || ""}">(${item.previewTagText || "TAG"})</span>
+                <span class="preview-name">${username}</span>: Hello world!
+            </div>
+        `;
+    }
+
+    function getShopActionState(item, user) {
+        const owned = !!user?.inventory?.[item.id];
+        const isEquipped = !!user && (
+            user.equipped[item.category] === item.id ||
+            (item.id === "customTag" && user.equipped.tag === "customTag")
+        );
+        const canAfford = Number(user?.coins || 0) >= item.price;
+
+        let buttonText = "buy";
+        let buttonClass = "btn-primary";
+        let disabled = false;
+        let statusText = owned ? "owned" : "not owned";
+        let priceText = `${formatCoinValue(item.price)} coins`;
+
+        if (owned) {
+            if (isEquipped) {
+                buttonText = "equipped";
+                buttonClass = "btn-secondary";
+                disabled = true;
+                statusText = "equipped";
+            } else if (item.id === "customTag") {
+                buttonText = "use";
+                buttonClass = "btn-secondary";
+                statusText = "unlocked";
+            } else {
+                buttonText = "equip";
+                buttonClass = "btn-secondary";
+                statusText = "owned";
+            }
+        } else if (!canAfford) {
+            statusText = "not enough coins";
+        }
+
+        return { owned, isEquipped, canAfford, buttonText, buttonClass, disabled, statusText, priceText };
+    }
+
+    function setShopFeedback(message = "", type = "") {
+        const el = document.getElementById("shop-feedback");
+        if (!el) return;
+        el.textContent = message;
+        el.className = "shop-feedback" + (type ? ` ${type}` : "");
+    }
+
+    function getFilteredShopItems(user) {
+        return SHOP_ITEMS.filter(item => {
+            const matchesQuery = !shopState.query || item.name.toLowerCase().includes(shopState.query) || item.description.toLowerCase().includes(shopState.query);
+            const matchesCategory = shopState.category === "all" || item.category === shopState.category;
+
+            let matchesOwnership = true;
+            const actionState = getShopActionState(item, user);
+
+            if (shopState.ownership === "owned") matchesOwnership = actionState.owned;
+            else if (shopState.ownership === "unowned") matchesOwnership = !actionState.owned;
+            else if (shopState.ownership === "equipped") matchesOwnership = actionState.isEquipped;
+
+            return matchesQuery && matchesCategory && matchesOwnership;
+        });
+    }
+
+    function syncSelectedShopItem(user) {
+        const filtered = getFilteredShopItems(user);
+        const selectedStillVisible = filtered.some(item => item.id === shopState.selectedItemId);
+
+        if (!filtered.length) {
+            shopState.selectedItemId = null;
+            return null;
+        }
+
+        if (!selectedStillVisible) {
+            shopState.selectedItemId = filtered[0].id;
+        }
+
+        return filtered.find(item => item.id === shopState.selectedItemId) || filtered[0];
+    }
+
+    function createDefaultInventory() {
+        return {
+            vipTag: false,
+            legendTag: false,
+            customTag: false,
+            rainbowName: false,
+            goldName: false,
+            rainbowAvatar: false
+        };
+    }
+
+    function createDefaultEquipped() {
+        return {
+            tag: null,
+            nameEffect: null,
+            avatarEffect: null
+        };
+    }
+
+    function sanitizeCustomTag(value) {
+        return (value || "")
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "")
+            .slice(0, 10);
+    }
+
+    function createNewUserRecord(password) {
+        return {
+            password,
+            createdAt: Date.now(),
+            level: Math.floor(Math.random() * 20) + 1,
+            coins: Math.floor(Math.random() * 5000) + 500,
+            inventory: createDefaultInventory(),
+            equipped: createDefaultEquipped(),
+            customTagText: "MYTAG",
+            selectedHat: "none"
+        };
+    }
+
+    function ensureUserData(user) {
+        const safeUser = user || {};
+        return {
+            password: safeUser.password ?? "",
+            createdAt: safeUser.createdAt ?? Date.now(),
+            level: safeUser.level ?? 1,
+            coins: Number(safeUser.coins ?? 0),
+            inventory: { ...createDefaultInventory(), ...(safeUser.inventory || {}) },
+            equipped: { ...createDefaultEquipped(), ...(safeUser.equipped || {}) },
+            customTagText: sanitizeCustomTag(safeUser.customTagText || "MYTAG") || "MYTAG",
+            selectedHat: (safeUser.selectedHat && hatData[safeUser.selectedHat]) ? safeUser.selectedHat : "none"
+        };
+    }
+
+    function getCurrentUserData(withUsers = false) {
+        if (!currentUser) return withUsers ? { users: null, user: null } : null;
+
+        const users = getUsers();
+        if (!users[currentUser]) return withUsers ? { users, user: null } : null;
+
+        users[currentUser] = ensureUserData(users[currentUser]);
+        setUsers(users);
+
+        return withUsers ? { users, user: users[currentUser] } : users[currentUser];
+    }
+
+    function saveCurrentUserData(updater) {
+        const payload = getCurrentUserData(true);
+        if (!payload || !payload.user) return null;
+
+        const nextUser = typeof updater === "function"
+            ? updater(JSON.parse(JSON.stringify(payload.user)))
+            : { ...payload.user, ...(updater || {}) };
+
+        payload.users[currentUser] = ensureUserData(nextUser);
+        setUsers(payload.users);
+        return payload.users[currentUser];
+    }
+
+    function getShopItem(id) {
+        return SHOP_ITEMS.find(item => item.id === id) || null;
+    }
+
+    function getNameEffectClass(effectId) {
+        if (effectId === "rainbowName") return "rainbow-text";
+        if (effectId === "goldName") return "gold-text";
+        return "";
+    }
+
+    function getEquippedTagData(user) {
+        const tagId = user?.equipped?.tag;
+
+        if (!tagId) return null;
+        if (tagId === "vipTag") return { text: "VIP", className: "" };
+        if (tagId === "legendTag") return { text: "LEGEND", className: "legend" };
+        if (tagId === "customTag") {
+            return { text: sanitizeCustomTag(user.customTagText || "MYTAG") || "MYTAG", className: "custom" };
+        }
+
+        return null;
+    }
+
+    function formatCoinValue(value) {
+        return Number(value || 0).toLocaleString();
+    }
+
+    function applyAvatarEffect(coreEl, effectId) {
+        if (!coreEl) return;
+        coreEl.classList.toggle("rainbow", effectId === "rainbowAvatar");
+    }
+
+    function refreshAccountUi() {
+        const user = getCurrentUserData();
+        if (!user) return;
+
+        document.getElementById("logged-in-text").textContent = `logged in as ${currentUser}`;
+        document.getElementById("settings-current-user").textContent = currentUser;
+        document.getElementById("saved-account-count").textContent = `${Object.keys(getUsers()).length} account(s) on this device`;
+        document.getElementById("home-level").textContent = user.level ?? 1;
+        document.getElementById("home-coins").textContent = formatCoinValue(user.coins);
+        document.getElementById("shop-coins").textContent = formatCoinValue(user.coins);
+
+        updateChatPreview();
+        updateAvatarPreviewEffects();
+        renderShop();
+        renderShopSelection();
+    }
+
+    function updateAvatarPreviewEffects() {
+        const user = getCurrentUserData();
+        if (!user) return;
+
+        applyAvatarEffect(document.getElementById("avatar-preview-core"), user.equipped.avatarEffect);
+        applyAvatarEffect(document.getElementById("shop-avatar-core"), user.equipped.avatarEffect);
+
+        const hat = hatData[selectedHatKey] || hatData.none;
+        const imgSrc = hatTextureOverrides[selectedHatKey] || `https://skap.io/textures/hats/${hat.file}.png`;
+
+        const mainHat = document.getElementById("selected-hat-preview");
+        const shopHat = document.getElementById("shop-preview-hat");
+
+        if (mainHat) mainHat.src = imgSrc;
+        if (shopHat) shopHat.src = imgSrc;
+    }
+
+    function updateChatPreview() {
+        const user = getCurrentUserData();
+        if (!user) return;
+
+        const previewTag = document.getElementById("chat-preview-tag");
+        const previewName = document.getElementById("chat-preview-name");
+        const previewMessage = document.getElementById("chat-preview-message");
+        const previewInput = document.getElementById("chat-preview-input");
+        const customTagInput = document.getElementById("custom-tag-input");
+        const customTagStatus = document.getElementById("custom-tag-status");
+
+        if (previewInput && previewMessage) {
+            previewMessage.textContent = previewInput.value.trim() || "Hello world!";
+        }
+
+        if (customTagInput) {
+            const cleanTag = sanitizeCustomTag(customTagInput.value);
+            if (customTagInput.value !== cleanTag) customTagInput.value = cleanTag;
+        }
+
+        const tagData = getEquippedTagData(user);
+
+        if (tagData) {
+            previewTag.textContent = `(${tagData.text})`;
+            previewTag.className = `preview-tag-pill ${tagData.className || ""}`.trim();
+            previewTag.classList.remove("hidden");
+        } else {
+            previewTag.className = "preview-tag-pill hidden";
+            previewTag.textContent = "";
+        }
+
+        previewName.textContent = currentUser;
+        previewName.className = `preview-name ${getNameEffectClass(user.equipped.nameEffect)}`.trim();
+
+        if (customTagStatus) {
+            customTagStatus.textContent = user.inventory.customTag
+                ? `saved tag: (${sanitizeCustomTag(user.customTagText) || "MYTAG"})`
+                : "custom tags are locked";
+        }
+    }
+
+    function renderShop() {
+        const container = document.getElementById("shop-grid");
+        const emptyState = document.getElementById("shop-empty");
+        const countEl = document.getElementById("shop-results-count");
+
+        if (!container) return;
+
+        const user = getCurrentUserData();
+        if (!user) {
+            container.innerHTML = "";
+            if (emptyState) emptyState.classList.remove("visible");
+            if (countEl) countEl.textContent = "0 items";
+            return;
+        }
+
+        const filteredItems = getFilteredShopItems(user);
+        const selectedItem = syncSelectedShopItem(user);
+
+        container.innerHTML = "";
+
+        filteredItems.forEach(item => {
+            const actionState = getShopActionState(item, user);
+            const statePillClass = actionState.isEquipped ? "state-equipped" : actionState.owned ? "state-owned" : "";
+            const isSelected = selectedItem && selectedItem.id === item.id;
+
+            const card = document.createElement("div");
+            card.className = `shop-item-card ${actionState.owned ? "owned" : ""} ${actionState.isEquipped ? "equipped" : ""} ${isSelected ? "selected" : ""}`.trim();
+            card.innerHTML = `
+                <div class="shop-item-top">
+                    <div>
+                        <div class="shop-item-name">${item.name}</div>
+                        <div class="shop-item-desc">${item.description}</div>
+                    </div>
+                    <div class="shop-price">${actionState.priceText}</div>
+                </div>
+                <div class="shop-item-meta">
+                    <span class="shop-pill">${getCategoryLabel(item.category)}</span>
+                    <span class="shop-pill ${statePillClass}">${actionState.statusText}</span>
+                </div>
+                <div class="shop-preview-box">
+                    ${getShopPreviewMarkup(item, currentUser || "username")}
+                </div>
+                <div class="btn-row" style="justify-content:flex-start; margin-top:auto;">
+                    <button class="${actionState.buttonClass}" ${actionState.disabled ? "disabled" : ""}>${actionState.buttonText}</button>
+                </div>
+            `;
+
+            card.addEventListener("click", (event) => {
+                if (event.target.closest("button")) return;
+                shopState.selectedItemId = item.id;
+                renderShop();
+                renderShopSelection();
+            });
+
+            const btn = card.querySelector("button");
+            btn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                shopState.selectedItemId = item.id;
+                handleShopItemAction(item.id);
+            });
+
+            container.appendChild(card);
+        });
+
+        if (countEl) {
+            countEl.textContent = `${filteredItems.length} item${filteredItems.length === 1 ? "" : "s"}`;
+        }
+
+        if (emptyState) {
+            emptyState.classList.toggle("visible", filteredItems.length === 0);
+        }
+    }
+
+    function renderShopSelection() {
+        const user = getCurrentUserData();
+        const selectedItem = user ? syncSelectedShopItem(user) : null;
+
+        const titleEl = document.getElementById("shop-selected-title");
+        const descEl = document.getElementById("shop-selected-desc");
+        const priceEl = document.getElementById("shop-selected-price");
+        const categoryEl = document.getElementById("shop-selected-category");
+        const statusEl = document.getElementById("shop-selected-status");
+        const actionBtn = document.getElementById("shop-selected-action");
+        const noteEl = document.getElementById("shop-selected-note");
+
+        if (!titleEl || !descEl || !priceEl || !categoryEl || !statusEl || !actionBtn || !noteEl) return;
+
+        if (!user || !selectedItem) {
+            titleEl.textContent = "no item selected";
+            descEl.textContent = "change the filters or click an item card to inspect it here.";
+            priceEl.textContent = "--";
+            categoryEl.textContent = "category";
+            statusEl.textContent = "status";
+            actionBtn.textContent = "select an item";
+            actionBtn.className = "btn-primary";
+            actionBtn.disabled = true;
+            actionBtn.onclick = null;
+            noteEl.textContent = "preview updates live below";
+            return;
+        }
+
+        const actionState = getShopActionState(selectedItem, user);
+
+        titleEl.textContent = selectedItem.name;
+        descEl.textContent = selectedItem.description;
+        priceEl.textContent = actionState.priceText;
+        categoryEl.textContent = getCategoryLabel(selectedItem.category);
+        statusEl.textContent = actionState.statusText;
+        statusEl.className = `shop-pill ${actionState.isEquipped ? "state-equipped" : actionState.owned ? "state-owned" : ""}`.trim();
+
+        actionBtn.textContent = actionState.buttonText;
+        actionBtn.className = actionState.buttonClass;
+        actionBtn.disabled = actionState.disabled;
+        actionBtn.onclick = () => handleShopItemAction(selectedItem.id);
+
+        if (actionState.owned) {
+            noteEl.textContent = selectedItem.id === "customTag"
+                ? "custom tag text is controlled below"
+                : "owned items can be re-equipped any time";
+        } else if (!actionState.canAfford) {
+            noteEl.textContent = `you need ${formatCoinValue(selectedItem.price - user.coins)} more coins`;
+        } else {
+            noteEl.textContent = "buying instantly unlocks this cosmetic";
+        }
+    }
+
+    function handleShopItemAction(itemId) {
+        const item = getShopItem(itemId);
+        const user = getCurrentUserData();
+        if (!item || !user) return;
+
+        if (!user.inventory[itemId]) {
+            buyShopItem(itemId);
+            return;
+        }
+
+        if (itemId === "customTag") {
+            equipCustomTag();
+            return;
+        }
+
+        equipShopItem(itemId);
+    }
+
+    function buyShopItem(itemId) {
+        const item = getShopItem(itemId);
+        if (!item) return;
+
+        const before = getCurrentUserData();
+        if (!before) return;
+
+        if (before.inventory[itemId]) {
+            return;
+        }
+
+        if (before.coins < item.price) {
+            setShopFeedback("not enough coins for that item", "error");
+            return;
+        }
+
+        const updated = saveCurrentUserData(user => {
+            user.coins -= item.price;
+            user.inventory[itemId] = true;
+
+            if (item.id === "customTag" && !sanitizeCustomTag(user.customTagText)) {
+                user.customTagText = "MYTAG";
+            }
+
+            if (item.id !== "customTag") {
+                user.equipped[item.category] = itemId;
+            }
+
+            return user;
+        });
+
+        if (!updated) return;
+
+        if (item.id === "customTag") {
+            setShopFeedback(`${item.name} unlocked`, "success");
+        } else {
+            setShopFeedback(`${item.name} purchased and equipped`, "success");
+        }
+
+        refreshAccountUi();
+    }
+
+    function equipShopItem(itemId) {
+        const item = getShopItem(itemId);
+        if (!item) return;
+
+        saveCurrentUserData(user => {
+            if (!user.inventory[itemId]) return user;
+            user.equipped[item.category] = itemId;
+            return user;
+        });
+
+        setShopFeedback(`${item.name} equipped`, "success");
+        refreshAccountUi();
+    }
+
+    function equipCustomTag() {
+        const user = getCurrentUserData();
+        if (!user) return;
+
+        if (!user.inventory.customTag) {
+            setShopFeedback("buy Custom Tag first", "error");
+            return;
+        }
+
+        const input = document.getElementById("custom-tag-input");
+        const cleanTag = sanitizeCustomTag(input?.value || user.customTagText || "MYTAG") || "MYTAG";
+
+        saveCurrentUserData(data => {
+            data.customTagText = cleanTag;
+            data.equipped.tag = "customTag";
+            return data;
+        });
+
+        if (input) input.value = cleanTag;
+        setShopFeedback(`custom tag equipped as (${cleanTag})`, "success");
+        refreshAccountUi();
+    }
+
+    function clearTagEquip() {
+        saveCurrentUserData(user => {
+            user.equipped.tag = null;
+            return user;
+        });
+
+        setShopFeedback("tag cleared", "success");
+        refreshAccountUi();
+    }
+
+    function clearAllCosmetics() {
+        saveCurrentUserData(user => {
+            user.equipped = createDefaultEquipped();
+            return user;
+        });
+
+        setShopFeedback("all equipped shop effects cleared", "success");
+        refreshAccountUi();
+    }
+
+
+    function getUsers() {
+        try {
+            return JSON.parse(localStorage.getItem(USER_DB_KEY)) || {};
+        } catch {
+            return {};
+        }
+    }
+
+    function setUsers(users) {
+        localStorage.setItem(USER_DB_KEY, JSON.stringify(users));
+    }
+
+    function setAuthMessage(message, type = "") {
+        const el = document.getElementById("auth-message");
+        el.textContent = message;
+        el.className = "form-message" + (type ? ` ${type}` : "");
+    }
+
+    function sanitizeUsernameInput(value) {
+        return value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 16);
+    }
+
+    function validateUsername(username) {
+        if (username.length < 1 || username.length > 16) {
+            return "username must be 1-16 characters";
+        }
+        if (!/^[a-zA-Z0-9]+$/.test(username)) {
+            return "username must be alphanumeric only";
+        }
+        return "";
+    }
+
+    function getCredentials() {
+        const usernameInput = document.getElementById("username-input");
+        const passwordInput = document.getElementById("password-input");
+        const username = sanitizeUsernameInput(usernameInput.value.trim());
+        usernameInput.value = username;
+        const password = passwordInput.value;
+        return { username, password };
+    }
+
+    function registerUser() {
+        const { username, password } = getCredentials();
+        const usernameError = validateUsername(username);
+
+        if (usernameError) {
+            setAuthMessage(usernameError, "error");
+            return;
+        }
+
+        const users = getUsers();
+
+        if (users[username]) {
+            setAuthMessage("username is taken", "error");
+            return;
+        }
+
+        users[username] = createNewUserRecord(password);
+
+        setUsers(users);
+        localStorage.setItem(CURRENT_USER_KEY, username);
+        currentUser = username;
+
+        setAuthMessage("account created successfully", "success");
+        enterApp(username);
+    }
+
+    function login() {
+        const { username, password } = getCredentials();
+        const usernameError = validateUsername(username);
+
+        if (usernameError) {
+            setAuthMessage(usernameError, "error");
+            return;
+        }
+
+        const users = getUsers();
+
+        if (!users[username]) {
+            setAuthMessage("user not found", "error");
+            return;
+        }
+
+        users[username] = ensureUserData(users[username]);
+        setUsers(users);
+
+        if (users[username].password !== password) {
+            setAuthMessage("password is incorrect", "error");
+            return;
+        }
+
+        localStorage.setItem(CURRENT_USER_KEY, username);
+        currentUser = username;
+        setAuthMessage("login successful", "success");
+        enterApp(username);
+    }
+
+    function enterApp(username) {
+        const users = getUsers();
+        users[username] = ensureUserData(users[username] || createNewUserRecord(""));
+        setUsers(users);
+
+        document.getElementById("auth-screen").classList.add("hidden");
+        document.getElementById("main-nav").style.display = "flex";
+        showScreen("play-screen", document.querySelector(".nav-links span"));
+        updateHomeRoomCount();
+        loadAvatar();
+
+        const customTagInput = document.getElementById("custom-tag-input");
+        if (customTagInput) {
+            customTagInput.value = users[username].customTagText || "MYTAG";
+        }
+
+        setShopFeedback("");
+        refreshAccountUi();
+    }
+
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem(CURRENT_USER_KEY);
+        document.getElementById("main-nav").style.display = "none";
+        document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+        document.getElementById("auth-screen").classList.remove("hidden");
+        setAuthMessage("", "");
+
+        const previewName = document.getElementById("chat-preview-name");
+        const previewTag = document.getElementById("chat-preview-tag");
+        if (previewName) {
+            previewName.textContent = "username";
+            previewName.className = "preview-name";
+        }
+        if (previewTag) {
+            previewTag.className = "preview-tag-pill hidden";
+            previewTag.textContent = "";
+        }
+        setShopFeedback("");
+    }
+
+    function showScreen(id, el) {
+        document.querySelectorAll(".screen").forEach(s => s.classList.add("hidden"));
+        document.querySelectorAll(".nav-links span").forEach(s => s.classList.remove("active"));
+        document.getElementById(id).classList.remove("hidden");
+        if (el) el.classList.add("active");
+    }
+
+    function updateHomeRoomCount() {
+        document.getElementById("home-rooms").textContent = rooms.length;
+    }
+
+    function renderRooms() {
+        const roomsList = document.getElementById("rooms-list");
+        const searchValue = document.getElementById("rooms-search").value.trim().toLowerCase();
+        const filterValue = document.getElementById("rooms-filter").value;
+
+        const filteredRooms = rooms.filter(room => {
+            const matchesSearch =
+                room.name.toLowerCase().includes(searchValue) ||
+                room.desc.toLowerCase().includes(searchValue) ||
+                room.mode.toLowerCase().includes(searchValue);
+
+            const matchesFilter = filterValue === "all" || room.mode === filterValue;
+            return matchesSearch && matchesFilter;
+        });
+
+        roomsList.innerHTML = "";
+
+        filteredRooms.forEach(room => {
+            const div = document.createElement("div");
+            div.className = "room-item";
+            div.innerHTML = `
+                <div>
+                    <div class="room-name">${room.name}</div>
+                    <div class="room-desc">${room.desc}</div>
+                    <div class="room-pill">${room.ping}ms ping</div>
+                </div>
+                <div>
+                    <div class="room-meta-label">players</div>
+                    <div class="room-meta-value">${room.players} / ${room.max}</div>
+                </div>
+                <div>
+                    <div class="room-meta-label">mode</div>
+                    <div class="room-meta-value">${room.mode}</div>
+                </div>
+                <button class="join-btn" onclick="joinRoom('${room.name.replace(/'/g, "\\'")}')">join</button>
+            `;
+            roomsList.appendChild(div);
+        });
+
+        const totalPlayers = filteredRooms.reduce((sum, room) => sum + room.players, 0);
+        const totalSlots = filteredRooms.reduce((sum, room) => sum + (room.max - room.players), 0);
+        const bestPing = filteredRooms.length ? Math.min(...filteredRooms.map(r => r.ping)) : 0;
+
+        document.getElementById("stat-rooms").textContent = filteredRooms.length;
+        document.getElementById("stat-players").textContent = totalPlayers;
+        document.getElementById("stat-slots").textContent = totalSlots;
+        document.getElementById("stat-best-ping").textContent = `${bestPing}ms`;
+    }
+
+    function joinRoom(name) {
+        alert(`joining ${name}`);
+    }
+
+    function renderHats() {
+        const container = document.getElementById("hat-container");
+        container.innerHTML = "";
+
+        Object.keys(hatData).forEach(key => {
+            const hat = hatData[key];
+            const imgSrc = hatTextureOverrides[key] || `https://skap.io/textures/hats/${hat.file}.png`;
+
+            const div = document.createElement("div");
+            div.className = "hat-item" + (selectedHatKey === key ? " active" : "");
+            div.innerHTML = `<img src="${imgSrc}" alt="${hat.name}"><span class="hat-name">${hat.name}</span>`;
+            div.onclick = () => selectHat(key);
+            container.appendChild(div);
+        });
+    }
+
+    function selectHat(key) {
+        selectedHatKey = key;
+        const hat = hatData[key];
+        const imgSrc = hatTextureOverrides[key] || `https://skap.io/textures/hats/${hat.file}.png`;
+
+        document.getElementById("selected-hat-preview").src = imgSrc;
+        document.getElementById("selected-hat-name").textContent = hat.name;
+        document.getElementById("home-hat").textContent = hat.name;
+
+        const shopHat = document.getElementById("shop-preview-hat");
+        if (shopHat) shopHat.src = imgSrc;
+
+        renderHats();
+        updateAvatarPreviewEffects();
+    }
+
+    function saveAvatar() {
+        saveCurrentUserData(user => {
+            user.selectedHat = selectedHatKey;
+            return user;
+        });
+
+        updateAvatarPreviewEffects();
+        alert("avatar saved");
+    }
+
+    function loadAvatar() {
+        const user = getCurrentUserData();
+        if (user && user.selectedHat && hatData[user.selectedHat]) {
+            selectedHatKey = user.selectedHat;
+        } else {
+            selectedHatKey = "none";
+        }
+        selectHat(selectedHatKey);
+    }
+
+    function saveSettings() {
+        const settings = {
+            compactUi: document.getElementById("compact-ui").checked,
+            showNews: document.getElementById("show-news").checked,
+            qualityPreset: document.getElementById("quality-preset").value,
+            panelBlur: document.getElementById("panel-blur").value,
+            masterVolume: document.getElementById("master-volume").value,
+            muteUnfocused: document.getElementById("mute-unfocused").checked
+        };
+
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        applySettings(settings);
+        alert("settings saved");
+    }
+
+    function applySettings(settings) {
+        document.querySelectorAll(".glass-panel, .rooms-shell, .settings-shell, .avatar-shell, .shop-shell, .play-main, .play-side")
+            .forEach(el => {
+                el.style.backdropFilter = `blur(${settings.panelBlur || 12}px)`;
+            });
+
+        document.querySelectorAll(".news-list").forEach(el => {
+            el.style.display = settings.showNews ? "flex" : "none";
+        });
+
+        document.body.style.setProperty("--panel-border", settings.qualityPreset === "ultra" ? "rgb(70,70,70)" : "rgb(50,50,50)");
+
+        if (settings.compactUi) {
+            document.body.style.setProperty("--panel-bg", "rgba(10, 10, 10, 0.92)");
+        } else {
+            document.body.style.setProperty("--panel-bg", "rgba(10, 10, 10, 0.88)");
+        }
+    }
+
+    function loadSettings() {
+        let settings = null;
+        try {
+            settings = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+        } catch {
+            settings = null;
+        }
+
+        if (!settings) return;
+
+        document.getElementById("compact-ui").checked = !!settings.compactUi;
+        document.getElementById("show-news").checked = !!settings.showNews;
+        if (settings.qualityPreset) document.getElementById("quality-preset").value = settings.qualityPreset;
+        if (settings.panelBlur !== undefined) document.getElementById("panel-blur").value = settings.panelBlur;
+        if (settings.masterVolume !== undefined) document.getElementById("master-volume").value = settings.masterVolume;
+        document.getElementById("mute-unfocused").checked = !!settings.muteUnfocused;
+
+        applySettings(settings);
+    }
+
+    function setupTabs() {
+        const tabs = document.querySelectorAll(".settings-tab");
+        const sections = document.querySelectorAll(".settings-section");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                tabs.forEach(t => t.classList.remove("active"));
+                sections.forEach(s => s.classList.remove("active"));
+
+                tab.classList.add("active");
+                const target = document.getElementById(`settings-${tab.dataset.tab}`);
+                if (target) target.classList.add("active");
+            });
+        });
+    }
+
+    function updateLoader(done, total, message = "") {
+        const percent = total ? Math.round((done / total) * 100) : 0;
+        loaderBar.style.width = percent + "%";
+        loaderCount.textContent = `${done} / ${total}`;
+        loaderPercent.textContent = `${percent}%`;
+        if (message) loaderLog.textContent = message;
+    }
+
+    function finishLoader(message = "ready") {
+        updateLoader(textureUrls.length, textureUrls.length, message);
+        setTimeout(() => {
+            loaderEl.classList.add("fade-out");
+            setTimeout(() => {
+                loaderEl.remove();
+            }, 500);
+        }, 250);
+    }
+
+    function uniqueUrls(urls) {
+        return [...new Set(urls)];
+    }
+
+    function logSummary(prefix, stats) {
+        console.log(
+            `${prefix} DONE → Total: ${stats.total}, Cached new: ${stats.cachedNow}, Already cached: ${stats.alreadyCached}, Warmed: ${stats.warmed}, Failed cache: ${stats.failedCache}, Failed warm: ${stats.failedWarm}`
+        );
+    }
+
+    function warmImage(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+
+            img.onload = () => {
+                textureImageRefs.push(img);
+                resolve({ ok: true, url });
+            };
+
+            img.onerror = () => {
+                resolve({ ok: false, url });
+            };
+
+            img.src = url;
+        });
+    }
+
+    async function runWithConcurrency(items, limit, worker) {
+        const results = new Array(items.length);
+        let index = 0;
+
+        async function next() {
+            while (index < items.length) {
+                const current = index++;
+                results[current] = await worker(items[current], current);
+            }
+        }
+
+        const workers = Array.from({ length: Math.min(limit, items.length) }, () => next());
+        await Promise.all(workers);
+        return results;
+    }
+
+    async function cacheAndWarmTextures(urls) {
+        const unique = uniqueUrls(urls);
+
+        const stats = {
+            total: unique.length,
+            cachedNow: 0,
+            alreadyCached: 0,
+            warmed: 0,
+            failedCache: 0,
+            failedWarm: 0
+        };
+
+        let processed = 0;
+        updateLoader(0, unique.length, "opening texture cache...");
+
+        if (!("caches" in window)) {
+            await runWithConcurrency(unique, 8, async (url) => {
+                updateLoader(processed, unique.length, `warming ${url.split("/").pop()}...`);
+                const warmed = await warmImage(url);
+                if (warmed.ok) stats.warmed++;
+                else stats.failedWarm++;
+                processed++;
+                updateLoader(processed, unique.length, `processed ${url.split("/").pop()}`);
+            });
+
+            logSummary("[Texture Cache]", stats);
+            finishLoader(`ready · warmed ${stats.warmed}/${stats.total}`);
+            return stats;
+        }
+
+        const cache = await caches.open(TEXTURE_CACHE_NAME);
+
+        await runWithConcurrency(unique, 8, async (url) => {
+            const shortName = url.split("/").pop();
+            updateLoader(processed, unique.length, `processing ${shortName}...`);
+
+            try {
+                const existing = await cache.match(url);
+
+                if (existing) {
+                    stats.alreadyCached++;
+                } else {
+                    const response = await fetch(url, {
+                        mode: "cors",
+                        credentials: "omit",
+                        cache: "force-cache"
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    await cache.put(url, response.clone());
+                    stats.cachedNow++;
+                }
+            } catch (err) {
+                stats.failedCache++;
+            }
+
+            const warmed = await warmImage(url);
+            if (warmed.ok) stats.warmed++;
+            else stats.failedWarm++;
+
+            processed++;
+            updateLoader(processed, unique.length, `finished ${shortName}`);
+        });
+
+        logSummary("[Texture Cache]", stats);
+        finishLoader(`ready · cached ${stats.cachedNow}, reused ${stats.alreadyCached}`);
+        return stats;
+    }
+
+    const usernameInput = document.getElementById("username-input");
+    usernameInput.addEventListener("input", () => {
+        const cleaned = sanitizeUsernameInput(usernameInput.value);
+        if (usernameInput.value !== cleaned) {
+            usernameInput.value = cleaned;
+        }
+    });
+
+    document.getElementById("rooms-search").addEventListener("input", renderRooms);
+    document.getElementById("rooms-filter").addEventListener("change", renderRooms);
+
+    document.getElementById("chat-preview-input").addEventListener("input", updateChatPreview);
+    document.getElementById("custom-tag-input").addEventListener("input", () => {
+        const input = document.getElementById("custom-tag-input");
+        const cleanTag = sanitizeCustomTag(input.value);
+        if (input.value !== cleanTag) input.value = cleanTag;
+
+        saveCurrentUserData(user => {
+            user.customTagText = cleanTag || "MYTAG";
+            return user;
+        });
+
+        updateChatPreview();
+        renderShop();
+        renderShopSelection();
+    });
+
+    document.getElementById("shop-search").addEventListener("input", (event) => {
+        shopState.query = event.target.value.trim().toLowerCase();
+        renderShop();
+        renderShopSelection();
+    });
+
+    document.getElementById("shop-ownership-filter").addEventListener("change", (event) => {
+        shopState.ownership = event.target.value;
+        renderShop();
+        renderShopSelection();
+    });
+
+    document.querySelectorAll(".shop-category-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            document.querySelectorAll(".shop-category-tab").forEach(btn => btn.classList.remove("active"));
+            tab.classList.add("active");
+            shopState.category = tab.dataset.category;
+            renderShop();
+            renderShopSelection();
+        });
+    });
+
+    renderRooms();
+    renderHats();
+    renderShop();
+    setupTabs();
+    loadSettings();
+
+    const rememberedUser = localStorage.getItem(CURRENT_USER_KEY);
+    if (rememberedUser && getUsers()[rememberedUser]) {
+        currentUser = rememberedUser;
+        enterApp(rememberedUser);
+    }
+
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    let w, h, points = [];
+    const spacing = 22;
+    const radius = 1.5;
+    const repelRadius = 140;
+    const maxPush = 22;
+    const ease = 0.1;
+    const mouse = { x: -9999, y: -9999, active: false };
+
+    function getColor(x, y) {
+        const cx = w * 0.5;
+        const cy = h * 0.7;
+        let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI;
+        angle = (angle + 360 + 180) % 360;
+
+        const stops = [
+            { a: 0, c: [255,255,255] },
+            { a: 72, c: [238,195,45] },
+            { a: 144, c: [236,75,75] },
+            { a: 216, c: [112,154,185] },
+            { a: 288, c: [77,255,191] },
+            { a: 360, c: [255,255,255] }
+        ];
+
+        for (let i = 0; i < stops.length - 1; i++) {
+            const s1 = stops[i];
+            const s2 = stops[i + 1];
+            if (angle >= s1.a && angle <= s2.a) {
+                const t = (angle - s1.a) / (s2.a - s1.a);
+                return `rgb(${s1.c[0] + (s2.c[0] - s1.c[0]) * t | 0},${s1.c[1] + (s2.c[1] - s1.c[1]) * t | 0},${s1.c[2] + (s2.c[2] - s1.c[2]) * t | 0})`;
+            }
+        }
+        return "#fff";
+    }
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        w = window.innerWidth;
+        h = window.innerHeight;
+
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        points = [];
+        for (let y = 0; y < Math.ceil(h / spacing) + 1; y++) {
+            for (let x = 0; x < Math.ceil(w / spacing) + 1; x++) {
+                const bx = x * spacing;
+                const by = y * spacing;
+                points.push({
+                    baseX: bx,
+                    baseY: by,
+                    x: bx,
+                    y: by,
+                    color: getColor(bx, by)
+                });
+            }
+        }
+    }
+
+    function loop() {
+        ctx.fillStyle = "#0f0f0f";
+        ctx.fillRect(0, 0, w, h);
+
+        for (const p of points) {
+            let tx = p.baseX;
+            let ty = p.baseY;
+
+            if (mouse.active) {
+                const dx = p.baseX - mouse.x;
+                const dy = p.baseY - mouse.y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist < repelRadius && dist > 0) {
+                    const force = 1 - dist / repelRadius;
+                    tx += (dx / dist) * force * maxPush;
+                    ty += (dy / dist) * force * maxPush;
+                }
+            }
+
+            p.x += (tx - p.x) * ease;
+            p.y += (ty - p.y) * ease;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("mousemove", e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+    });
+
+    window.addEventListener("resize", resize);
+
+    resize();
+    loop();
+    cacheAndWarmTextures(textureUrls);
+</script>
+</body>
+</html>
