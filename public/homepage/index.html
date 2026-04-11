@@ -110,9 +110,9 @@
 
     .sidebar-cta {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      width: 100%; padding: 0.75rem 1rem;
+      width: 100%; height: 65px; padding: 0.75rem 1rem;
       border-radius: var(--radius-md);
-      font-size: 14px; font-weight: 600;
+      font-size: 20px; font-weight: 6000;
       cursor: pointer; text-decoration: none;
       transition: opacity 0.15s, transform 0.15s;
       flex-shrink: 0;
@@ -213,14 +213,6 @@
     .roadmap-name { font-size: 14px; font-weight: 500; flex: 1; }
     .roadmap-status { font-size: 11px; color: var(--text-tertiary); padding: 3px 9px; border: 0.5px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.03); }
 
-    /* ABOUT */
-    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 2rem; }
-    .about-card { background: rgba(255,255,255,0.025); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; transition: border-color 0.2s, transform 0.2s; }
-    .about-card:hover { border-color: rgba(155,147,240,0.3); transform: translateY(-2px); }
-    .about-card-icon { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--purple-light); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
-    .about-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .about-card-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-
     /* CHANGELOG */
     .changelog-strip { max-width: 960px; margin: 0 auto; padding: 0 2rem 3rem; width: 100%; }
     .changelog-inner { border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
@@ -261,7 +253,6 @@
     <div class="nav-links">
       <a href="#projects">projects</a>
       <a href="#roadmap">roadmap</a>
-      <a href="#about">about</a>
     </div>
   </nav>
 
@@ -271,13 +262,12 @@
     <div class="hero">
       <div class="hero-badge"><div class="hero-badge-dot"></div>open to ideas</div>
       <h1>projects that feel <em>refreshed</em></h1>
-      <p>A small group of friends dedicated to taking existing ideas and giving them new life — cleaner, faster, and better designed than before.</p>
+      <p>2 people that took a small idea and turned it into a full-blown game.</p>
       <div class="stats-bar">
         <div class="stat"><strong>1</strong> active project</div>
-        <div class="stat"><strong>2</strong> contributors</div>
+        <div class="stat"><strong>2</strong> developers</div>
         <div class="stat"><strong>Open beta</strong> · skap.refreshed.pw</div>
-        <div class="stat"><strong id="viewerCount">0</strong> live viewers <span id="viewerStatus" style="margin-left:6px;color:var(--text-tertiary);">offline</span></div>
-        <div class="stat">updated <strong>today</strong></div>
+        <div class="stat">updated <strong>everyday</strong></div>
       </div>
     </div>
   </div>
@@ -303,7 +293,7 @@
           <div class="card-meta">
             <span class="card-pill">redesign</span>
             <span class="card-pill">refreshed builds</span>
-            <span class="card-pill">open beta</span>
+            <span class="card-pill">has fucking updates</span>
           </div>
           <div class="card-link-hint">
             Click to learn more
@@ -325,16 +315,16 @@
 
         <!-- Credits — fills remaining height -->
         <div class="sidebar-credits">
-          <div class="credits-label">made by</div>
+          <div class="credits-label">made by (on discord)</div>
 
           <div class="credits-person">
-            <span class="rainbow-name">lmarye</span>
-            <span class="credits-role">lead developer, designer, game creator</span>
+            <span class="rainbow-name">lmarye</span></span>
+            <span class="credits-role">lead developer, designer, game creator, dank!</span>
           </div>
 
           <div class="credits-person">
             <span class="rainbow-name delay">.cam0.</span>
-            <span class="credits-role">developer, contributor, hosting</span>
+            <span class="credits-role">developer, contributor, hoster!</span>
           </div>
 
           <div class="credits-footer">
@@ -348,42 +338,22 @@
   <hr class="divider">
 
   <div class="section fade-in" id="roadmap">
-    <div class="section-label">Roadmap</div>
-    <div class="section-heading">What's coming next</div>
-    <p class="section-subtext">A live look at what we're working on, planning, and exploring. Things move fast — check back often.</p>
+    <div class="section-label">Why you should play</div>
+    <div class="section-heading">5 Reasons to play Skap | Refreshed</div>
+    <p class="section-subtext">here are some reason why Skap | Refreshed is the best game for you:</p>
     <div class="roadmap-list">
-      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">Skap | Refreshed — level editor overhaul</div><span class="roadmap-status">coming soon</span></div>
-      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">New Maps and Powers</div><span class="roadmap-status">coming soon</span></div>
-      <div class="roadmap-item"><div class="roadmap-dot planned"></div><div class="roadmap-name">Second refreshed.pw project (TBA)</div><span class="roadmap-status">planned</span></div>
-      <div class="roadmap-item"><div class="roadmap-dot planned"></div><div class="roadmap-name">Public Discord for the community</div><span class="roadmap-status">planned</span></div>
-      <div class="roadmap-item"><div class="roadmap-dot exploring"></div><div class="roadmap-name">Contributor open-source program</div><span class="roadmap-status">exploring</span></div>
+      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">it gets updates, atleast once in a while</div><span class="roadmap-status">true ✅</span></div>
+      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">has all powers, all enemies, and hats,</div><span class="roadmap-status">true ✅</span></div>
+      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">you can get your own hats and tags</div><span class="roadmap-status">true ✅</span></div>
+      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">you can blame the owner if you get in trouble</div><span class="roadmap-status">true ✅</span></div>
+      <div class="roadmap-item"><div class="roadmap-dot soon"></div><div class="roadmap-name">made by some tuff boiehs</div><span class="roadmap-status">extra true ✅</span></div>
+      
     </div>
   </div>
 
   <hr class="divider">
 
-  <div class="section fade-in" id="about">
-    <div class="section-label">About</div>
-    <div class="section-heading">Who's behind refreshed.pw</div>
-    <p class="section-subtext">refreshed.pw is an independent dev project with one focus: taking software people already love and making it feel the way it always should have.</p>
-    <div class="about-grid">
-      <div class="about-card">
-        <div class="about-card-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 12.5L5.5 9 8 11.5 11 7.5 14 10" stroke="#9b93f0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="#9b93f0" stroke-width="1.3"/></svg></div>
-        <div class="about-card-title">Thoughtful redesigns</div>
-        <p class="about-card-text">Every project is rebuilt with care — not just reskinned. UI, flow, and feel are reconsidered from the ground up.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#9b93f0" stroke-width="1.3"/><path d="M8 5V8.5L10 10" stroke="#9b93f0" stroke-width="1.3" stroke-linecap="round"/></svg></div>
-        <div class="about-card-title">Performance first</div>
-        <p class="about-card-text">Lean and fast. No unnecessary dependencies — just the code that needs to be there and nothing more.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8C3 5.24 5.24 3 8 3s5 2.24 5 5-2.24 5-5 5" stroke="#9b93f0" stroke-width="1.3" stroke-linecap="round"/><path d="M3 11V8H6" stroke="#9b93f0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="about-card-title">Always iterating</div>
-        <p class="about-card-text">Projects here are never truly "done" — they ship early and keep getting better with every update.</p>
-      </div>
-    </div>
-  </div>
+  
 
   <div class="changelog-strip fade-in">
     <div class="changelog-inner">
@@ -394,11 +364,11 @@
       <div class="changelog-row"><span class="changelog-date">Apr 9, 2026</span><span class="changelog-version">v0.4.2</span><span class="changelog-msg">Fixed lobby rendering issue on Firefox</span></div>
       <div class="changelog-row"><span class="changelog-date">Apr 7, 2026</span><span class="changelog-version">v0.4.1</span><span class="changelog-msg">Improved load times by ~40% across all pages</span></div>
       <div class="changelog-row"><span class="changelog-date">Apr 3, 2026</span><span class="changelog-version">v0.4.0</span><span class="changelog-msg">Launched open beta — refreshed.pw goes live</span></div>
-      <div class="changelog-row"><span class="changelog-date">Mar 28, 2026</span><span class="changelog-version">v0.3.5</span><span class="changelog-msg">New player HUD and leaderboard redesign</span></div>
+      <div class="changelog-row"><span class="changelog-date">Mar 28, 2024</span><span class="changelog-version">v0.3.5</span><span class="changelog-msg">New player HUD and leaderboard redesign</span></div>
     </div>
   </div>
 
-  <footer>&copy; 2026 <a href="/">refreshed.pw</a> — built with care</footer>
+  <footer>&copy; 2026 <a href="/">refreshed.pw</a> — a peak game that you should try</footer>
 
   <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
   <div class="drawer" id="drawer">
@@ -428,70 +398,8 @@
     </div>
   </div>
 
-  <script src="https://cdn.ably.com/lib/ably.min-2.js"></script>
-
   <script>
-    const ABLY_CONFIG = {
-      channelName: 'match:12345:stats',
-      authUrl: '/api/ably/auth',
-      key: '' // Only for local dev testing. Leave blank in production.
-    };
-
     const glow = document.getElementById('cursor-glow');
-    const viewerCountEl = document.getElementById('viewerCount');
-    const viewerStatusEl = document.getElementById('viewerStatus');
-
-    function setViewerStatus(text) {
-      if (viewerStatusEl) viewerStatusEl.textContent = text;
-    }
-
-    function updateViewerCount(count) {
-      if (viewerCountEl) viewerCountEl.textContent = String(count ?? 0);
-    }
-
-    async function startViewerCount() {
-      if (!window.Ably) {
-        setViewerStatus('ably missing');
-        return;
-      }
-
-      const clientOptions = {};
-      if (ABLY_CONFIG.authUrl) clientOptions.authUrl = ABLY_CONFIG.authUrl;
-      else if (ABLY_CONFIG.key) clientOptions.key = ABLY_CONFIG.key;
-      else {
-        setViewerStatus('set authUrl');
-        return;
-      }
-
-      setViewerStatus('connecting...');
-
-      try {
-        const realtime = new Ably.Realtime(clientOptions);
-        const channel = realtime.channels.get(ABLY_CONFIG.channelName, {
-          params: { occupancy: 'metrics' }
-        });
-
-        realtime.connection.on((stateChange) => {
-          if (stateChange.current === 'connected') setViewerStatus('connected');
-          else if (stateChange.current === 'connecting') setViewerStatus('connecting...');
-          else if (stateChange.current === 'disconnected') setViewerStatus('disconnected');
-          else if (stateChange.current === 'suspended') setViewerStatus('reconnecting...');
-          else if (stateChange.current === 'failed') setViewerStatus('failed');
-        });
-
-        await channel.attach();
-
-        channel.subscribe('[meta]occupancy', (message) => {
-          const metrics = message?.data?.metrics || {};
-          updateViewerCount(metrics.subscribers ?? 0);
-          setViewerStatus('live');
-        });
-      } catch (error) {
-        console.error('Ably viewer count error:', error);
-        setViewerStatus('error');
-      }
-    }
-
     document.addEventListener('mousemove', e => { glow.style.left = e.clientX+'px'; glow.style.top = e.clientY+'px'; glow.style.opacity = '1'; });
     document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
     function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
@@ -499,8 +407,44 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
     const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.08 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    startViewerCount();
   </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
