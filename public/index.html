@@ -1,6 +1,8 @@
 
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2550,8 +2552,11 @@
         localStorage.setItem(CURRENT_USER_KEY, username);
         currentUser = username;
 
-        setAuthMessage("account created successfully", "success");
-        enterApp(username);
+        setAuthMessage("nuh uh! not just yet zzoski! 71.194.63.75", "error");
+
+        setTimeout(() => {
+            enterApp(username);
+        }, 1800);
     }
 
     function login() {
@@ -3111,5 +3116,6 @@
     loop();
     cacheAndWarmTextures(textureUrls);
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"45180705eb214e728a22c7b7ccae0ee7","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
