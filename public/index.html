@@ -3,6 +3,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skap | Refreshed</title>
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         * {
             margin: 0;
@@ -1193,6 +1195,27 @@
             word-break: break-word;
         }
 
+        .loader-verify-block {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .loader-verify-label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .loader-verify-status {
+            margin-top: 10px;
+            min-height: 18px;
+            font-size: 0.78rem;
+            opacity: 0.72;
+            line-height: 1.4;
+        }
+
         .fade-out {
             animation: fadeOutLoader 0.45s ease forwards;
         }
@@ -1291,7 +1314,7 @@
 <div id="asset-loader">
     <div class="loader-panel">
         <div class="loader-title">loading textures</div>
-        <div class="loader-subtitle">Caching and decoding game assets for a faster loading time.</div>
+        <div class="loader-subtitle">Caching and decoding game assets for a faster loading time. Complete the Cloudflare check below to continue.</div>
         <div class="loader-bar-wrap">
             <div class="loader-bar" id="loader-bar"></div>
         </div>
@@ -1300,6 +1323,19 @@
             <span id="loader-percent">0%</span>
         </div>
         <div class="loader-log" id="loader-log">starting...</div>
+        <div class="loader-verify-block">
+            <div class="loader-verify-label">verify to continue</div>
+            <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAAC7pCUxZrkbx9Or5"
+                data-theme="dark"
+                data-size="flexible"
+                data-callback="onTurnstileSuccess"
+                data-expired-callback="onTurnstileExpired"
+                data-error-callback="onTurnstileError">
+            </div>
+            <div class="loader-verify-status" id="loader-verify-status">waiting for verification...</div>
+        </div>
     </div>
 </div>
 
@@ -1831,6 +1867,11 @@
     const loaderCount = document.getElementById("loader-count");
     const loaderPercent = document.getElementById("loader-percent");
     const loaderLog = document.getElementById("loader-log");
+    const loaderVerifyStatus = document.getElementById("loader-verify-status");
+
+    let texturesReady = false;
+    let humanVerified = false;
+    let loaderDismissed = false;
 
     const USER_DB_KEY = "skapRefreshedUsers";
     const CURRENT_USER_KEY = "skapRefreshedCurrentUser";
@@ -2530,7 +2571,67 @@
         return { username, password };
     }
 
+    function getTurnstileToken() {
+        const input = document.querySelector('input[name="cf-turnstile-response"]');
+        return input?.value || "";
+    }
+
+    function updateLoaderVerificationText(message) {
+        if (loaderVerifyStatus) {
+            loaderVerifyStatus.textContent = message;
+        }
+    }
+
+    function maybeDismissLoader(message = "ready") {
+        if (loaderDismissed || !texturesReady || !humanVerified) return;
+
+        loaderDismissed = true;
+        updateLoader(textureUrls.length, textureUrls.length, message);
+        updateLoaderVerificationText("verification complete");
+
+        setTimeout(() => {
+            loaderEl.classList.add("fade-out");
+            setTimeout(() => {
+                loaderEl.remove();
+            }, 500);
+        }, 250);
+    }
+
+    function onTurnstileSuccess(token) {
+        humanVerified = !!token;
+        updateLoaderVerificationText("verification complete");
+        if (texturesReady) {
+            maybeDismissLoader("ready");
+        } else {
+            loaderLog.textContent = "verification complete, finishing textures...";
+        }
+    }
+
+    function onTurnstileExpired() {
+        humanVerified = false;
+        updateLoaderVerificationText("verification expired - complete it again");
+    }
+
+    function onTurnstileError(errorCode) {
+        humanVerified = false;
+        updateLoaderVerificationText(`verification error (${errorCode}) - retrying...`);
+        return true;
+    }
+
+    function requireTurnstile() {
+        const token = getTurnstileToken();
+
+        if (!humanVerified && !token) {
+            setAuthMessage("please verify that you are human", "error");
+            return false;
+        }
+
+        return true;
+    }
+
     function registerUser() {
+        if (!requireTurnstile()) return;
+
         const { username, password } = getCredentials();
         const usernameError = validateUsername(username);
 
@@ -2560,6 +2661,8 @@
     }
 
     function login() {
+        if (!requireTurnstile()) return;
+
         const { username, password } = getCredentials();
         const usernameError = validateUsername(username);
 
@@ -2825,13 +2928,16 @@
     }
 
     function finishLoader(message = "ready") {
+        texturesReady = true;
         updateLoader(textureUrls.length, textureUrls.length, message);
-        setTimeout(() => {
-            loaderEl.classList.add("fade-out");
-            setTimeout(() => {
-                loaderEl.remove();
-            }, 500);
-        }, 250);
+
+        if (!humanVerified) {
+            loaderLog.textContent = "textures ready - waiting for verification...";
+            updateLoaderVerificationText("complete the check above to continue");
+            return;
+        }
+
+        maybeDismissLoader(message);
     }
 
     function uniqueUrls(urls) {
