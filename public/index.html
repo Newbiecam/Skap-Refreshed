@@ -1360,8 +1360,8 @@
         </div>
 
         <div class="form-group">
-            <label for="password-input">password</label>
-            <input type="password" id="password-input" placeholder="enter any password">
+            <label for="password-input">password (local only)</label>
+            <input type="password" id="password-input" placeholder="kept local for cosmetics only">
         </div>
 
         <div class="btn-row">
@@ -2542,6 +2542,35 @@
         localStorage.setItem(USER_DB_KEY, JSON.stringify(users));
     }
 
+    async function fetchClaimedUsernames() {
+        const response = await fetch('/api/usernames');
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            const hint = response.status === 404 ? 'API route not found. Deploy on Vercel with project root as output directory.' : '';
+            throw new Error(payload.error || hint || 'Unable to load usernames');
+        }
+
+        return Array.isArray(payload.usernames) ? payload.usernames : [];
+    }
+
+    async function claimUsernameOnServer(username) {
+        const response = await fetch('/api/claim-username', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            const hint = response.status === 404 ? 'API route not found. Deploy on Vercel with project root as output directory.' : '';
+            throw new Error(payload.error || hint || 'Failed to claim username');
+        }
+
+        return payload;
+    }
+
     function setAuthMessage(message, type = "") {
         const el = document.getElementById("auth-message");
         el.textContent = message;
@@ -2629,10 +2658,10 @@
         return true;
     }
 
-    function registerUser() {
+    async function registerUser() {
         if (!requireTurnstile()) return;
 
-        const { username, password } = getCredentials();
+        const { username } = getCredentials();
         const usernameError = validateUsername(username);
 
         if (usernameError) {
@@ -2640,30 +2669,27 @@
             return;
         }
 
-        const users = getUsers();
-
-        if (users[username]) {
-            setAuthMessage("username is taken", "error");
+        try {
+            await claimUsernameOnServer(username);
+        } catch (error) {
+            setAuthMessage(error.message || "username is taken", "error");
             return;
         }
 
-        users[username] = createNewUserRecord(password);
-
+        const users = getUsers();
+        users[username] = ensureUserData(users[username] || createNewUserRecord(""));
         setUsers(users);
+
         localStorage.setItem(CURRENT_USER_KEY, username);
         currentUser = username;
-
-        setAuthMessage("nuh uh! not just yet zzoski! 71.194.63.75", "error");
-
-        setTimeout(() => {
-            enterApp(username);
-        }, 1800);
+        setAuthMessage("username claimed successfully", "success");
+        enterApp(username);
     }
 
-    function login() {
+    async function login() {
         if (!requireTurnstile()) return;
 
-        const { username, password } = getCredentials();
+        const { username } = getCredentials();
         const usernameError = validateUsername(username);
 
         if (usernameError) {
@@ -2671,20 +2697,23 @@
             return;
         }
 
-        const users = getUsers();
+        let claimedUsernames = [];
 
-        if (!users[username]) {
+        try {
+            claimedUsernames = await fetchClaimedUsernames();
+        } catch (error) {
+            setAuthMessage(error.message || "unable to check usernames", "error");
+            return;
+        }
+
+        if (!claimedUsernames.includes(username)) {
             setAuthMessage("user not found", "error");
             return;
         }
 
-        users[username] = ensureUserData(users[username]);
+        const users = getUsers();
+        users[username] = ensureUserData(users[username] || createNewUserRecord(""));
         setUsers(users);
-
-        if (users[username].password !== password) {
-            setAuthMessage("password is incorrect", "error");
-            return;
-        }
 
         localStorage.setItem(CURRENT_USER_KEY, username);
         currentUser = username;
