@@ -1,0 +1,14 @@
+{
+  "name": "skap-refreshed-vercel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static frontend + Vercel API routes for Supabase-backed username claims",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.8"
+  }
+}
