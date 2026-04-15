@@ -2547,7 +2547,8 @@
         const payload = await response.json().catch(() => ({}));
 
         if (!response.ok) {
-            throw new Error(payload.error || 'Unable to load usernames');
+            const hint = response.status === 404 ? 'API route not found. Deploy on Vercel with project root as output directory.' : '';
+            throw new Error(payload.error || hint || 'Unable to load usernames');
         }
 
         return Array.isArray(payload.usernames) ? payload.usernames : [];
@@ -2563,7 +2564,8 @@
         const payload = await response.json().catch(() => ({}));
 
         if (!response.ok) {
-            throw new Error(payload.error || 'Failed to claim username');
+            const hint = response.status === 404 ? 'API route not found. Deploy on Vercel with project root as output directory.' : '';
+            throw new Error(payload.error || hint || 'Failed to claim username');
         }
 
         return payload;

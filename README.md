@@ -55,6 +55,21 @@ A template is included in `.env.example`.
    - `https://<your-project>.vercel.app/api/usernames`
    - `https://<your-project>.vercel.app/`
 
+
+## Troubleshooting: `/api/claim-username` returns 404
+
+If you see `POST /api/claim-username 404`, your deployment is usually configured as a static-only output.
+
+Fix in Vercel:
+1. Open your project in Vercel → **Settings** → **Build & Development Settings**.
+2. Set **Output Directory** to empty (not `public`).
+3. Keep project root at the repository root so `/api` is detected.
+4. Redeploy from the latest commit.
+
+After redeploy, test:
+- `https://<your-domain>/api/usernames` should return JSON.
+- `https://<your-domain>/api/claim-username` should return `405 Method not allowed` for a browser GET (this is expected).
+
 ## API contract
 
 ### `GET /api/usernames`
